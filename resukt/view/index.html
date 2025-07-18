@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Euphoria 2024</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #ffffe2;
+            color: #000000;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .logo {
+            margin-bottom: 20px;
+            background-color: rgb(102, 255, 6);
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .results-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align:center;
+            font-size: 2rem;
+            color: #000000;
+        }
+        .team-total {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            padding: 10px;
+            border-bottom: 2px solid #000;
+            z-index: 10;
+        }
+        .team-total p {
+            margin: 0;
+            padding: 5px;
+            font-weight: bold;
+        }
+        .team-result {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .team-result:last-child {
+            border-bottom: none;
+        }
+@media screen and (max-width: 800px) {
+    .results-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align:center;
+            font-size: 10px;
+            color: #000000;
+        }
+        .results-container h1{
+            font-size: 15px;
+        }
+        .results-container h4{
+            font-size: 15px;
+            font-weight: 200;
+        }
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo">
+        <a href="../index.html" target="_blank"><img src="./img/logo.png" alt="Euphoria 2024 Logo" width="200"></a>
+    </div>
+
+    <!-- Team Total Marks Section (Sticky) -->
+    <div class="container">
+        <div id="team-total" class="team-total text-center">
+            <!-- Team total marks will be dynamically updated here -->
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="container mt-4">
+        <div class="results-container">
+            <h3 class="text-center">Published Results</h3>
+            <div id="results-display" class="mt-4"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjHueDijOQMRTCHF2OGWoHlDI2aYQ3TsI",
+            authDomain: "euphoria-24.firebaseapp.com",
+            projectId: "euphoria-24",
+            storageBucket: "euphoria-24.appspot.com",
+            messagingSenderId: "827547444105",
+            appId: "1:827547444105:web:13eb7ca53fc7f117eeb758",
+            measurementId: "G-0QCE0LY7DM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        async function fetchResults() {
+            const resultsDisplay = document.getElementById('results-display');
+            const teamTotalDisplay = document.getElementById('team-total');
+            let teamTotals = {};
+
+            resultsDisplay.innerHTML = "<p>Loading results...</p>";
+
+            const q = query(collection(db, 'results'), where('published', '==', true));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                resultsDisplay.innerHTML = "<p>No results published yet.</p>";
+                return;
+            }
+
+            resultsDisplay.innerHTML = '';
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+
+                // Calculate the total marks for each team and store it in teamTotals
+                if (!teamTotals[data.firstTeam]) {
+                    teamTotals[data.firstTeam] = 0;
+                }
+                if (!teamTotals[data.secondTeam]) {
+                    teamTotals[data.secondTeam] = 0;
+                }
+                teamTotals[data.firstTeam] += data.firstMarks;
+                teamTotals[data.secondTeam] += data.secondMarks;
+                if (data.thirdTeam) {
+                    if (!teamTotals[data.thirdTeam]) {
+                        teamTotals[data.thirdTeam] = 0;
+                    }
+                    teamTotals[data.thirdTeam] += data.thirdMarks;
+                }
+                if (data.fouthTeam) {
+                    if (!teamTotals[data.fouthTeam]) {
+                        teamTotals[data.fouthTeam] = 0;
+                    }
+                    teamTotals[data.fouthTeam] += data.fouthMarks;
+                }
+
+                // Display the results for the program
+                const resultHTML = `
+                
+                    <div class="team-result">
+                        <h4>${data.programName} (${data.category})</h4>
+                        <h1><strong>1st Place:</strong> ${data.firstTeam} - ${data.firstRank} </p>
+                        <p><strong>2nd Place:</strong> ${data.secondTeam} - ${data.secondRank} </p>
+                        ${data.thirdTeam ? `<p><strong>3rd Place:</strong> ${data.thirdTeam} - ${data.thirdRank} </h1>` : ''}
+                    </div>
+                `;
+                resultsDisplay.innerHTML += resultHTML;
+            });
+
+            // // Display the total marks for each team at the top (sticky)
+            // teamTotalDisplay.innerHTML = Object.keys(teamTotals).map(team => `
+            //     <p>${team}: ${teamTotals[team]} marks</p>
+            // `).join('');
+        }
+
+        fetchResults();
+    </script>
+</body>
+</html>

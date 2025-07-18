@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Entry - Euphoria 2024</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .logo {
+            margin-bottom: 20px;
+            background-color: rgb(208, 255, 0);
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo">
+        <a href="../index.html" target="_blank"><img src="./img/logo.png" alt="Euphoria 2024 Logo" width="200"></a>
+    </div>
+
+    <!-- Result Entry Form -->
+    <div class="container mt-4">
+        <div class="form-container">
+            <h3 class="text-center">Result Entry Form</h3>
+            <form id="result-entry-form">
+                <div class="form-group">
+                    <label for="program-name">Program Name</label>
+                    <input type="text" class="form-control" id="program-name" placeholder="Enter Program Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Program Category</label>
+                    <select class="form-control" id="category">
+                        <option value="senior">Senior</option>
+                        <option value="junior">Junior</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="first-team">1st Place Team Name</label>
+                    <select class="form-control" id="first-team">
+                        <option value="team-qurthuba">Team Qurthuba</option>
+                        <option value="team-zaithoon">Team Zaithoon</option>
+                        <!-- <option value="team-others">Others</option> -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="first-rank">1st Place Holder Name</label>
+                    <input type="text" class="form-control" id="first-rank" placeholder="Enter 1st place holder name" required>
+                </div>
+                <div class="form-group">
+                    <label for="first-marks">Marks for 1st Place Holder</label>
+                    <input type="number" class="form-control" id="first-marks" placeholder="Enter marks for 1st place holder" required>
+                </div>
+                <div class="form-group">
+                    <label for="second-team">2nd Place Team Name</label>
+                    <select class="form-control" id="second-team">
+                        <option value="team-qurthuba">Team Qurthuba</option>
+                        <option value="team-zaithoon">Team Zaithoon</option>
+                        <!-- <option value="team-others">Others</option> -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="second-rank">2nd Place Holder Name</label>
+                    <input type="text" class="form-control" id="second-rank" placeholder="Enter 2nd place holder name" required>
+                </div>
+                <div class="form-group">
+                    <label for="second-marks">Marks for 2nd Place Holder</label>
+                    <input type="number" class="form-control" id="second-marks" placeholder="Enter marks for 2nd place holder" required>
+                </div>
+                <div class="form-group">
+                    <label for="third-team">3rd Place Team Name</label>
+                    <select class="form-control" id="third-team">
+                        <option value="">Select (Optional)</option>
+                        <option value="team-qurthuba">Team Qurthuba</option>
+                        <option value="team-zaithoon">Team Zaithoon</option>
+                        <!-- <option value="team-others">Others</option> -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="third-rank">3rd Place Holder Name</label>
+                    <input type="text" class="form-control" id="third-rank" placeholder="Enter 3rd place holder name">
+                </div>
+                <div class="form-group">
+                    <label for="third-marks">Marks for 3rd Place Holder</label>
+                    <input type="number" class="form-control" id="third-marks" placeholder="Enter marks for 3rd place holder">
+                </div>
+                <div class="form-group">
+                    <label for="fouth-team">4th Place Team Name</label>
+                    <select class="form-control" id="fouth-team">
+                        <option value="">Select (Optional)</option>
+                        <option value="team-qurthuba">Team Qurthuba</option>
+                        <option value="team-zaithoon">Team Zaithoon</option>
+                        <!-- <option value="team-others">Others</option> -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fouth-rank">4th Place Holder Name</label>
+                    <input type="text" class="form-control" id="fouth-rank" placeholder="Enter 4th place holder name">
+                </div>
+                <div class="form-group">
+                    <label for="fouth-marks">Marks for 4th Place Holder</label>
+                    <input type="number" class="form-control" id="fouth-marks" placeholder="Enter marks for 4th place holder">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save & Preview</button>
+            </form>
+            <div id="preview-display" class="mt-4"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, getDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjHueDijOQMRTCHF2OGWoHlDI2aYQ3TsI",
+            authDomain: "euphoria-24.firebaseapp.com",
+            projectId: "euphoria-24",
+            storageBucket: "euphoria-24.appspot.com",
+            messagingSenderId: "827547444105",
+            appId: "1:827547444105:web:13eb7ca53fc7f117eeb758",
+            measurementId: "G-0QCE0LY7DM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        document.getElementById('result-entry-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const programName = document.getElementById('program-name').value;
+            const category = document.getElementById('category').value;
+            const firstTeam = document.getElementById('first-team').value;
+            const firstRank = document.getElementById('first-rank').value;
+            const firstMarks = parseInt(document.getElementById('first-marks').value) || 0;
+            const secondTeam = document.getElementById('second-team').value;
+            const secondRank = document.getElementById('second-rank').value;
+            const secondMarks = parseInt(document.getElementById('second-marks').value) || 0;
+            const thirdTeam = document.getElementById('third-team').value || null;
+            const thirdRank = document.getElementById('third-rank').value || '';
+            const thirdMarks = parseInt(document.getElementById('third-marks').value) || 0;
+            const fouthTeam = document.getElementById('fouth-team').value || null;
+            const fouthRank = document.getElementById('fouth-rank').value || '';
+            const fouthMarks = parseInt(document.getElementById('fouth-marks').value) || 0;
+
+            const docRef = await addDoc(collection(db, 'results'), {
+                programName,
+                category,
+                firstTeam,
+                firstRank,
+                firstMarks,
+                secondTeam,
+                secondRank,
+                secondMarks,
+                thirdTeam,
+                thirdRank,
+                thirdMarks,
+                fouthTeam,
+                fouthRank,
+                fouthMarks,
+                published: false
+            });
+
+            displayPreview(docRef.id);
+        });
+
+        async function displayPreview(docId) {
+            const previewDisplay = document.getElementById('preview-display');
+
+            // Fetch the result from Firestore
+            const docRef = doc(db, 'results', docId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                previewDisplay.innerHTML = `
+                    <h4 class="text-center">Preview</h4>
+                    <p><strong>Program Name:</strong> ${data.programName}</p>
+                    <p><strong>Category:</strong> ${data.category}</p>
+                    <p><strong>1st Place Team:</strong> ${data.firstTeam} - ${data.firstRank} (${data.firstMarks} marks)</p>
+                    <p><strong>2nd Place Team:</strong> ${data.secondTeam} - ${data.secondRank} (${data.secondMarks} marks)</p>
+                    ${data.thirdTeam ? `<p><strong>3rd Place Team:</strong> ${data.thirdTeam} - ${data.thirdRank} (${data.thirdMarks} marks)</p>` : ''}
+                    ${data.fouthTeam ? `<p><strong>4th Place Team:</strong> ${data.fouthTeam} - ${data.fouthRank} (${data.fouthMarks} marks)</p>` : ''}
+                    <button id="publish-button" class="btn btn-success btn-block">Publish</button>
+                `;
+
+                document.getElementById('publish-button').addEventListener('click', async () => {
+                    try {
+                        await updateDoc(docRef, { published: true });
+                        alert('Results published successfully!');
+                        previewDisplay.innerHTML = '<p>Results have been published.</p>';
+                    } catch (error) {
+                        console.error('Error publishing results: ', error);
+                        alert('Error publishing results. Please try again.');
+                    }
+                });
+            } else {
+                previewDisplay.innerHTML = '<p>No data found.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

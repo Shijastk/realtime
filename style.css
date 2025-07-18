@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none;
+}
+/* Ensure no margins/padding for body */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: "Gruppo", sans-serif;
+}
+
+
+/* navbar */
+.navbar-toggler:focus{
+    outline: none !important;
+    background-color: transparent !important;
+}
+.navbar-toggler{
+border: none !important;
+}
+.navbar-dark{
+    background-color: black;
+}
+.nav-link:hover{
+    color: #ffbf00 !important;
+    /* text-transform: uppercase; */
+}
+.nav-logo{
+    width: 100px;
+}
+/* navbar end */
+
+
+/* Video Background */
+#background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -2;
+    object-fit: cover;
+}
+
+/* Dark Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    z-index: -1;
+}
+
+/* Center Content */
+.content {
+    z-index: 1;
+    max-width: 70%;
+    margin-top: 200px;
+}
+
+/* Logo Styling */
+.logo {
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+/* arts fest text */
+.arts-fest{
+    color: #ffbf00;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+/* lead */
+.lead{
+    color: antiquewhite;
+    padding: 50px;
+}
+/* end lead */
+/* end arts fest text */
+
+/* btn-costom */
+.btn-costom{
+    outline: 1px solid #ffbf00;
+    color: #ffbf00;
+    margin-top: -100px;
+}
+.tt{
+    margin-top: 10px;
+}
+.btn-costom:hover{
+    color: #fff;
+    background-color: #ffbf00;
+}
+/* end btn-costom */
+
+/* Blurry Glass Card Effect */
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: none;
+    padding: 20px;
+    border-radius: 15px;
+    /* margin-top: 100px; */
+}
+#team-counters{
+    margin-top: 100px;
+    background-color: rgb(30, 30, 30);
+    min-width: 100%;
+    padding: 100px;
+}
+/* Quote Carousel Styling */
+blockquote {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+
+@media only screen and (max-width: 600px) {
+    /* Blurry Glass Card Effect */
+.glass-card {
+    margin-top: 20px;
+}
+#cards-section{
+margin-top: 200px;
+}
+
+#team-counters{
+    margin-top: 100px;
+}
+.col-sm-6{
+    width: 50%;
+}
+.col-sm-6 h3{
+    font-size: 20px;
+}
+}

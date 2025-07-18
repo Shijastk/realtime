@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euphoria 2024 - Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            color: #ECB365;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Full-screen video background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            background-color: rgba(4, 28, 50, 0.8); /* Transparent dark background overlay */
+        }
+
+        .box-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .box {
+            background-color: rgba(4, 41, 58, 0.7); /* Dark glassy effect */
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .box-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Video -->
+    <video autoplay muted loop class="video-background">
+        <source src="https://videos.pexels.com/video-files/7101913/7101913-uhd_2560_1440_25fps.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <!-- Content -->
+    <div class="content">
+        <h1>Welcome to Euphoria 2024</h1>
+        <p>The Arts of Living</p>
+        <div class="box-container">
+            <div class="box">
+                <h3>About</h3>
+                <p>Learn more about the event and its mission.</p>
+            </div>
+            <div class="box">
+                <h3>Events</h3>
+                <p>Discover the exciting line-up of programs.</p>
+            </div>
+            <div class="box">
+                <h3>Results</h3>
+                <p>Check out the latest event results.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjHueDijOQMRTCHF2OGWoHlDI2aYQ3TsI",
+            authDomain: "euphoria-24.firebaseapp.com",
+            projectId: "euphoria-24",
+            storageBucket: "euphoria-24.appspot.com",
+            messagingSenderId: "827547444105",
+            appId: "1:827547444105:web:13eb7ca53fc7f117eeb758",
+            measurementId: "G-0QCE0LY7DM"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function displayResults() {
+            const resultsContainer = document.getElementById('results-container');
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "results"));
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.innerHTML = `
+                        <h2>${data.title}</h2>
+                        <p>${data.description}</p>
+                    `;
+                    resultsContainer.appendChild(resultItem);
+                });
+            } catch (error) {
+                console.error('Error fetching results: ', error);
+            }
+        }
+
+        window.onload = displayResults;
+    </script>
+</body>
+
+</html>

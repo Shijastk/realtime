@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+form {
+    margin: 20px 0;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#previewSection {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 20px;
+}
